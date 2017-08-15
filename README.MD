@@ -94,7 +94,7 @@ public class PersonPresenter implements IPresenter {
     }
 ```
 
-至此,即可解决 MVP 内存泄漏的问题,详细代码可看项目中的 [mvp](/app/src/java/mvp) 目录代码.
+至此,即可解决 MVP 内存泄漏的问题,详细代码可看项目中的 [mvp](./app/src/java/mvp) 目录代码.
 
 这么做不够优雅,需要手动管理 Presenter, 当然可以定义基类写入到 BaseActivity 中.
 
@@ -250,7 +250,7 @@ public class UserViewModel extends ViewModel {
 
 当 Activity 销毁了(本文所有的销毁,如果没有特别指明,指的都是 Activity 正常关闭,而不是其他因素导致的销毁重建),会自动将对应的 ViewModel 移除,这样就不会导致内存泄漏.同时,当 Activity 处于不可见的状态时,也不会去修改 UI.
 
-关于代码的详细请看项目中的 [lifecycle](/app/src/java/lifecycle) 目录下的实现.
+关于代码的详细请看项目中的 [lifecycle](./app/src/java/lifecycle) 目录下的实现.
 
 ## 原理
 讲原理之前先看一下这个架构的对应的 UML 类图,可以更好的帮助我们理解架构是怎样工作的
@@ -346,8 +346,8 @@ ViewModelStore 的一个 map 容器存储 ViewModel,通过 Activity 作为 key �
 原理:通过给 Activity 添加一个,HolderFragment ,设置 setRetainInstance(true);(屏幕旋转时,保持数据的状态)
 
 
-## 数据持久化 Room
-数据的持久化只要是通过 Room 这个类库的注解来实现创建,以及增删改查,比较简单,详细可以看[官方文档](https://developer.android.com/topic/libraries/architecture/room.html)
+## 数据持久化之数据库 Room
+数据的持久化是通过 Room 这个类库的注解来实现创建,以及增删改查,比较简单,详细可以看[官方文档](https://developer.android.com/topic/libraries/architecture/room.html)
 
 ```java
 @Entity
