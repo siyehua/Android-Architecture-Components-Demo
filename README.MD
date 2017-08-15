@@ -1,5 +1,5 @@
 # 浅谈 Android Architecture Components 使用和原理
-![ Android Architecture Components](./arch-hero-mobile.png)
+![ Android Architecture Components](./img/arch-hero-mobile.png)
 
 ## 阅读
 本文适合对 Android 开发,以及架构有一定了解的人阅读,实践性较强,最好结合项目运行了解.
@@ -104,25 +104,25 @@ public class PersonPresenter implements IPresenter {
 
 ### 使用 Android Architecture Components
 
-![ Android Architecture Components](./arch-hero.png)
+![ Android Architecture Components](./img/arch-hero.png)
 
 上述两个问题可以通过使用 AAC 架构解决.
 
 ## 介绍
 AAC 的核心是: Lifecycle, LiveData, ViewModel 以及 Room, 通过它可以非常优雅的让数据与界面交互,并做一些持久化的东西,高度解耦,自动管理生命周期, 而且不用担心内存泄漏的问题.
 
-![Android Architecture Components](./Architecture Components.png)
+![Android Architecture Components](./img/Architecture_Components.png)
 
 下面就一一介绍它们
 
 ### Lifecycle
-![ Android Architecture Components](./desktoplifecycles-2x.png)
+![ Android Architecture Components](./img/desktoplifecycles-2x.png)
 
 Lifecycle 主要用 State 和 Event 这两个枚举类来表达 Activity/Fragment 的生命周期和状态. LifecycleRegistry 是它的主要实现类,用于分发生命周期的变化.
 
 State 和 Event 之间的关系用下图表示:
 
-![ Android Architecture Components](./Lifecly status.png)
+![ Android Architecture Components](./img/Lifecly_status.png)
 
 ### LiveData
 LiveData 主要用于接受/更新数据, Lifecycle 的具体实现会将生命周期的变化传给 LiveData,LiveData 通过状态判断要不要刷新数据,假设要刷新数据,则通过 LifecycleObserver 将得到数据的变分发给对应的监听者(Activity/Fragment).
@@ -130,12 +130,12 @@ LiveData 主要用于接受/更新数据, Lifecycle 的具体实现会将生命�
 ### ViewModel
 用于管理数据,它持有 LiveData. 处理数据持久化,存取等具体逻辑, 相当于 MVP 中的 Presenter.
 
-![ Android Architecture Components](./ViewModel status.png)
+![ Android Architecture Components](./img/ViewModel_status.png)
 
 ### Room
 通过注解将数据持久化(数据库管理)
 
-![ Android Architecture Components](./desktoproom-2x.png)
+![ Android Architecture Components](./img/desktoproom-2x.png)
 
 
 ## 简单使用
@@ -255,7 +255,7 @@ public class UserViewModel extends ViewModel {
 ## 原理
 讲原理之前先看一下这个架构的对应的 UML 类图,可以更好的帮助我们理解架构是怎样工作的
 
-![ Android Architecture Components](./class.png)
+![ Android Architecture Components](./img/class.png)
 
 上文例子中,Activity 继承的是一个 LifecycleActivity,实际上它是 LifecycleOwner 的实现,这个接口的主要作用是返回一个 Lifecycle, 这个类前面介绍过了,它主要是作用是用来表达 UI 的 状态和过程,而 Lifecycle 的主要实现是 LifecycleRegistry.
 
@@ -282,7 +282,7 @@ Activity 除了为 Lifecycle 提供生命周期的变化事件之外,它还持�
 LiveData 这个类根据之前的介绍,它主要是分发生命周期的事件,在上述代码,具体的实现是 MutableLiveData. 它持有 LifecycleRegistry(可监听/获取 UI 生命周期的状态), Model(具体的对象类 User), 以及 LifecycleObserver(观察者).
 
 ### 事件传递
-![ Android Architecture Components](./Android Architecture Components.png)
+![ Android Architecture Components](./img/Android_Architecture_Components.png)
 
 架构的事件分两种,一种是 Activity/Fragment 的生命周期变化事件,还有一种是数据的变化事件.
 
@@ -326,12 +326,12 @@ void dispatchActivityCreated(Activity activity, Bundle savedInstanceState) {
 ReportFragment 的变化事件主要是通过 LifecycleRegistry 来表达的,而 LiveData 持有了 LifecycleRegistry,所以就获取到了生命周期的变化, LiveData 根据生命周期的状态,假设是销毁,就移除监听,假设是可见状态,就刷新数据,通过调用对应的观察者,从而实现了<b>生命周期变化</b>分发这个过程
 
 ### 数据变化事件分发过程
-![ Android Architecture Components](./Android Architecture Components.png)
+![ Android Architecture Components](./img/Android_Architecture_Components.png)
 
 还是刚刚那个图,数据的变化事件更加简单, Model 得到了数据,通过 LiveData 的 postData() 方法设置数据, LiveData 的处理,之前已经说了, LiveData 根据生命周期的状态来决定要不要刷新数据,假设要刷新,就通知观察者刷新即可.
 
 ### ViewModel 的持久化
-![ Android Architecture Components](./ViewModel status.png)
+![ Android Architecture Components](./img/ViewModel_status.png)
 
 ViewModel 之所以能在 Activity/Fragment 重建的时候依旧能保持,主要是通过 ViewModelProviders 创建ViewModel,而不是 new 一个 ViewModel.
 
